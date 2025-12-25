@@ -4,17 +4,18 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-// TODO: Replace with your actual Firebase config from the web project
+// For Expo, use process.env (with babel-plugin-dotenv or expo-constants for managed workflow)
 const firebaseConfig = {
-  apiKey: 'AIzaSyDzlKNFJ1ClEXy8TvTK29AeTaJe8MzDZYo',
-  authDomain: 'beyhan-family-website.firebaseapp.com',
-  projectId: 'beyhan-family-website',
-  storageBucket: 'beyhan-family-website.firebasestorage.app',
-  messagingSenderId: '967303162008',
-  appId: '1:967303162008:web:de9f26fca6a4a6c70d08ed',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
