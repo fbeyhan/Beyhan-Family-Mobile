@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth } from '../utils/firebase';
 
+
 export default function LoginScreen({ navigation }: any) {
   console.log('LoginScreen rendered');
   const [email, setEmail] = useState('');

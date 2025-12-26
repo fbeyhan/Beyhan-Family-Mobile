@@ -1,4 +1,6 @@
 
+import { StyleSheet, Text, View } from 'react-native';
+
 function FinanceScreen() {
   // FORCE VISIBLE TEST UI
   return (
@@ -17,5 +19,4 @@ const styles = StyleSheet.create({
   delete: { color: 'red', marginLeft: 12 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
-import { StyleSheet, Text, View } from 'react-native';
 
