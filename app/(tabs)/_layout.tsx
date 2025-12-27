@@ -1,31 +1,50 @@
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { auth } from '@/utils/firebase';
 import { Tabs } from 'expo-router';
 import type { User } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
 
-  const colorScheme = useColorScheme();
+const colorScheme = useColorScheme();
 function TabNavigator({ isAdmin, currentUserEmail }: { isAdmin: boolean | null, currentUserEmail: string | null }) {
   const colorScheme = useColorScheme();
   if (isAdmin === null) return null;
   return (
     <React.Fragment>
-      {/* Debug info for troubleshooting */}
-      <View style={{ backgroundColor: '#ffe0b2', padding: 8 }}>
-        <Text style={{ color: '#bf360c', fontSize: 12 }}>
-          Debug: user={currentUserEmail} | isAdmin={String(isAdmin)}
-        </Text>
-      </View>
+      {/* Debug info removed */}
       <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        screenOptions={({ route }) => ({
+          tabBarActiveTintColor: '#ff9800', // Strong accent color for active tab
+          tabBarInactiveTintColor: '#bbb',
+          tabBarLabelStyle: {
+            fontWeight: 'bold',
+            fontSize: 14,
+            marginBottom: 2,
+          },
+          tabBarIconStyle: {
+            marginTop: 2,
+          },
+          tabBarStyle: {
+            backgroundColor: '#fff',
+            borderTopLeftRadius: 18,
+            borderTopRightRadius: 18,
+            height: 64,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: -2 },
+            shadowOpacity: 0.08,
+            shadowRadius: 8,
+            elevation: 10,
+            borderTopWidth: 0,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+          },
           headerShown: false,
           tabBarButton: HapticTab,
-        }}>
+        })}
+      >
         <Tabs.Screen
           name="index"
           options={{
@@ -41,7 +60,7 @@ function TabNavigator({ isAdmin, currentUserEmail }: { isAdmin: boolean | null, 
           }}
         />
         <Tabs.Screen
-          name="portal"
+          name="family-portal"
           options={{
             title: 'Family Portal',
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.3.fill" color={color} />, 
@@ -75,10 +94,6 @@ export default function TabLayout() {
     return unsubscribe;
   }, []);
 
-  // Use a wrapper div with a key to force remount on user/admin change
-  return (
-    <View key={`${currentUserEmail}-${isAdmin}`} style={{ flex: 1 }}>
-      <TabNavigator isAdmin={isAdmin} currentUserEmail={currentUserEmail} />
-    </View>
-  );
+  // Return TabNavigator directly to avoid remounting issues
+  return <TabNavigator isAdmin={isAdmin} currentUserEmail={currentUserEmail} />;
 }

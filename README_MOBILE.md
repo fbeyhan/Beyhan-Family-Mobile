@@ -12,6 +12,8 @@ A modern, secure family mobile application built with Expo (React Native), TypeS
 - Features
 - Complete Development Guide
 - Roadmap & Next Steps
+- App Structure & Feature Plan (2025)
+- Implementation Best Practices
 
 ---
 
@@ -180,6 +182,46 @@ Beyhan-Family-Mobile/
 - [ ] Polish UI/UX, add animations and theming
 - [ ] Add E2E and unit tests (Jest, Detox, etc.)
 - [ ] Prepare for App Store deployment
+
+---
+
+## App Structure & Feature Plan (2025)
+
+### Main Navigation (Tab Bar)
+- **Home:** Dashboard/overview, recent activity, quick links.
+- **Explore:** Discover events, albums, suggestions, and search.
+- **Family Portal:** Profile, settings, member management, logout, change password.
+- **Finance:** Admin-only, for family finances.
+
+### Feature Breakdown
+- **Home:** Welcome, family news, upcoming events, recent photos, activity feed.
+- **Explore:** Discover albums, events, stories, search, suggestions.
+- **Family Portal:** Profile, edit profile, change password, logout, member management (admin), settings.
+- **Finance (Admin):** View/manage finances, add/edit expenses, reports.
+
+### Shared Features
+- **Photo Gallery:** Grid/list, emoji reactions, comments (add/edit/delete), edit/delete photo, upload.
+- **Events & Calendar:** Shared calendar, add/view events, birthdays, anniversaries.
+- **Notifications:** Push notifications for new photos, comments, events, etc.
+- **User Profiles:** Each member has a profile (photo, name, relationship, contact info).
+- **Roles & Permissions:** Admin (manage, approve, moderate), Regular (upload, comment, react, edit/delete own).
+- **Dark Mode:** Support system dark/light mode.
+- **Offline Support:** Cache recent photos/events for offline viewing.
+- **Security:** Firebase Auth, optional FaceID/TouchID, secure data handling.
+- **Onboarding/Tutorial:** Show new users how to use the app.
+- **Feedback/Support:** In-app feedback form or support link.
+
+---
+
+## Implementation Best Practices
+- Use stack navigation within each tab for drill-downs.
+- Use FlatList/SectionList for galleries and comments.
+- Use modal sheets for emoji pickers, editing, confirmations.
+- Optimistic UI for reactions/comments.
+- Context/Redux/Zustand for global state.
+- Firebase Firestore/Storage for real-time data and media.
+- Expo Notifications for push notifications.
+- Expo SecureStore for sensitive data.
 
 ---
 
