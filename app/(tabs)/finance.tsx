@@ -3,7 +3,7 @@ import { auth } from '@/utils/firebase';
 import { useRouter } from 'expo-router';
 import { User } from 'firebase/auth';
 import { useEffect } from 'react';
-import FinanceScreen from '../../screens/FinanceScreen';
+import FinanceScreen from '../finance';
 
 export default function FinanceTabGuard() {
 	const router = useRouter();

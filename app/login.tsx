@@ -1,10 +1,13 @@
-import { auth } from '@/utils/firebase';
+
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { auth } from '../utils/firebase';
+
 
 export default function LoginScreen() {
+  console.log('LoginScreen rendered');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,39 +17,118 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)'); // Go to tabs after login
+      router.replace('/'); // or router.replace('/(tabs)') if you want to go to the main tab navigator
     } catch (error: any) {
-      Alert.alert('Login failed', error.message);
-    } finally {
-      setLoading(false);
+      Alert.alert('Login Error', error.message);
     }
+    setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.logo}>🏠</Text>
+      <Text style={styles.title}>Beyhan Family</Text>
+      <Text style={styles.subtitle}>Welcome to Our Family Portal</Text>
+      <Text style={styles.label}>Email Address</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="your.email@example.com"
         autoCapitalize="none"
-        keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
       />
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Enter your password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
-      <Button title={loading ? 'Signing in...' : 'Sign In'} onPress={handleLogin} disabled={loading} />
+      <TouchableOpacity style={styles.forgotPassword}>
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Sign In</Text>
+        )}
+      </TouchableOpacity>
+      <Text style={styles.secureText}>🔒 Secure Family Access • Members Only</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 16 },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    backgroundColor: 'linear-gradient(180deg, #FFA726 0%, #F44336 100%)', // fallback for now
+  },
+  logo: {
+    fontSize: 48,
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#D32F2F',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 24,
+  },
+  label: {
+    alignSelf: 'flex-start',
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 4,
+    marginTop: 8,
+  },
+  input: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 8,
+    backgroundColor: '#fff',
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
+    marginBottom: 16,
+  },
+  forgotPasswordText: {
+    color: '#F57C00',
+    fontSize: 13,
+  },
+  button: {
+    width: '100%',
+    backgroundColor: '#F44336',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  secureText: {
+    marginTop: 12,
+    color: '#888',
+    fontSize: 13,
+    textAlign: 'center',
+  },
 });

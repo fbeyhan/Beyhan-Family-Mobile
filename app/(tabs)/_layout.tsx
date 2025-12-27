@@ -1,99 +1,35 @@
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { auth } from '@/utils/firebase';
 import { Tabs } from 'expo-router';
-import type { User } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
-
-const colorScheme = useColorScheme();
-function TabNavigator({ isAdmin, currentUserEmail }: { isAdmin: boolean | null, currentUserEmail: string | null }) {
-  const colorScheme = useColorScheme();
-  if (isAdmin === null) return null;
-  return (
-    <React.Fragment>
-      {/* Debug info removed */}
-      <Tabs
-        screenOptions={({ route }) => ({
-          tabBarActiveTintColor: '#ff9800', // Strong accent color for active tab
-          tabBarInactiveTintColor: '#bbb',
-          tabBarLabelStyle: {
-            fontWeight: 'bold',
-            fontSize: 14,
-            marginBottom: 2,
-          },
-          tabBarIconStyle: {
-            marginTop: 2,
-          },
-          tabBarStyle: {
-            backgroundColor: '#fff',
-            borderTopLeftRadius: 18,
-            borderTopRightRadius: 18,
-            height: 64,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: -2 },
-            shadowOpacity: 0.08,
-            shadowRadius: 8,
-            elevation: 10,
-            borderTopWidth: 0,
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-          },
-          headerShown: false,
-          tabBarButton: HapticTab,
-        })}
-      >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Home',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />, 
-          }}
-        />
-        <Tabs.Screen
-          name="explore"
-          options={{
-            title: 'Explore',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />, 
-          }}
-        />
-        <Tabs.Screen
-          name="family-portal"
-          options={{
-            title: 'Family Portal',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.3.fill" color={color} />, 
-          }}
-        />
-        <Tabs.Screen
-          name="finance"
-          options={{
-            title: 'Finance',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="dollarsign.circle.fill" color={color} />, 
-            // Hide the tab button for non-admins
-            tabBarButton: isAdmin === true ? HapticTab : () => null,
-          }}
-        />
-      </Tabs>
-    </React.Fragment>
-  );
-}
+import { User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
 export default function TabLayout() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
       const adminEmail = 'fbeyhan@gmail.com';
       const userEmail = user?.email?.trim().toLowerCase() ?? null;
-      setCurrentUserEmail(userEmail);
       setIsAdmin(userEmail === adminEmail.toLowerCase());
+      setLoading(false);
     });
     return unsubscribe;
   }, []);
 
-  // Return TabNavigator directly to avoid remounting issues
-  return <TabNavigator isAdmin={isAdmin} currentUserEmail={currentUserEmail} />;
+  if (loading) return null;
+
+  return (
+    <Tabs>
+      <Tabs.Screen name="index" options={{ title: 'Home' }} />
+      <Tabs.Screen name="explore" options={{ title: 'Explore' }} />
+      <Tabs.Screen name="family-pictures" options={{ title: 'Family Pictures' }} />
+      <Tabs.Screen name="family-tree" options={{ title: 'Family Tree' }} />
+      <Tabs.Screen name="trips" options={{ title: 'Trips' }} />
+      {isAdmin && <Tabs.Screen name="finance-home" options={{ title: 'Finance Home' }} />}
+      {isAdmin && <Tabs.Screen name="expenses" options={{ title: 'Expenses' }} />}
+      {isAdmin && <Tabs.Screen name="income" options={{ title: 'Income' }} />}
+      {isAdmin && <Tabs.Screen name="reports" options={{ title: 'Reports' }} />}
+    </Tabs>
+  );
 }
